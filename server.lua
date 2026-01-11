@@ -3,32 +3,34 @@ RegisterCommand("msgbox", function(source)
         id = 0,
         type = "msgbox",
         title = "Message Box",
-        text = "Hello from message box."
+        text = "Message.\nPlease take an action.",
+        buttons = { "Option 1", "Option 2", "Option 3", "Option 4", "Option 5" }
     })
 end, false)
 RegisterCommand("list", function(source)
     TriggerClientEvent("dialog:open", source, {
         id = 1,
         type = "list",
-        title = "List",
-        text = "Hello from list.",
-        options = { "Item 1", "Item 2", "Item 3" }
+        title = "Weapon Shop",
+        text = "",
+        options = { "Pistol [$500]", "Uzi [$750]", "AK-47 [$1250]", "Purchase", "Cancel"}
     })
 end, false)
 RegisterCommand("input", function(source)
     TriggerClientEvent("dialog:open", source, {
         id = 2,
         type = "input",
-        title = "List",
-        text = "Hello from input box.",
+        title = "Input",
+        text = "Inputbox:",
     })
 end, false)
 RegisterCommand("password", function(source)
     TriggerClientEvent("dialog:open", source, {
         id = 3,
         type = "password",
-        title = "Password input",
-        text = "Hello from password input.",
+        title = "Enter your password",
+        text = "Please enter your password.\n\nIf you forgot your password, please select Help.",
+        buttons = { "Log In", "Cancel", "Help" }
     })
 end, false)
 
