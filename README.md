@@ -1,4 +1,4 @@
-<h1>SAMP-styled dialogs for FiveM.</h1>
+<h2>SAMP-styled dialogs for FiveM.</h2>
 <p>SampDialogs brings user-interface similar to SAMP.</p>
 <p>Available types of dialogs:</p>
 
@@ -6,44 +6,82 @@
 * List
 * Input
 * Password Input
+<p>Screenshots below.</p>
 
-<p>You can of course type a title, text, button/item text and placeholder text for inputs.</p>
-<p>You can also add more than 2 buttons to the dialog.</p>
+<h3>Dialogs are triggered for players within server scripts.</h3>
 
-<h2>In future updates I will work on the list. It needs to look better.</h2>
+<h3>Examples (server.lua):</h3>
 
-<h3>Example how to trigger show dialog event for player (from server):</h3>
-
-```
-TriggerClientEvent("dialog:open", source, {
+```lua
+RegisterCommand("msgbox", function(source)
+    TriggerClientEvent("dialog:open", source, {
         id = 0,
         type = "msgbox",
         title = "Message Box",
-        text = "Message.\nPlease take an action.",
-        buttons = { "Option 1", "Option 2", "Option 3", "Option 4", "Option 5" }
-})
-```
+        text = "Example of Message Box\n123\naaa",
+        -- If not buttons typed - there will be one default button 'OK' for msgbox.
+        -- You can put your own buttons inside msgbox with:
+        --[[
+                buttons = { "Of course", "Okay", "Nope" }
+        ]]
+    })
+end, false)
 
-<h3>Server dialog response:</h3>
+RegisterCommand("list", function(source)
+    TriggerClientEvent("dialog:open", source, {
+        id = 1,
+        type = "list",
+        title = "Super List",
+        text = "Please choose an item.",
+        options = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" },
+        -- Item 6, Item 7... Dialog List can have so much items inside.
+        -- Scrollbar activates when height of list is greater than 300px.
 
-```
+        -- If not buttons typed - there will be two default buttons 'Choose' and 'Cancel'.
+        -- You can't add add more than two buttons to dialog list.
+        -- It's only possible to change the button text for your own.
+    })
+end, false)
+
+RegisterCommand("input", function(source)
+    TriggerClientEvent("dialog:open", source, {
+        id = 1,
+        type = "input",
+        title = "Input",
+        text = "Enter the amount of money:",
+        placeholder = "1000000", -- not required
+        buttons = { "Give", "Take", "Cancel" }
+
+        -- You can add more than two buttons to dialog input.
+        -- If not buttons typed - there will be two default buttons 'OK' and 'Cancel'.
+    })
+end, false)
+
+RegisterCommand("password", function(source)
+    TriggerClientEvent("dialog:open", source, {
+        id = 1,
+        type = "password",
+        title = "Password input",
+        text = "Enter your password:",
+        buttons = { "Log In", "Quit", "Help" }
+
+        -- The same as dialog input.
+    })
+end, false)
+
 RegisterNetEvent("dialog:response", function(id, value, input)
-    print(("Dialog %d | value=%s | input=%s | From player %s"):format(
-        id,
-        tostring(value), --[[ Value: clicked button ]]
-        tostring(input), --[[ Typed input ]]
+    print(("Dialog ID: %d | Value: %s | Input: %s | From player: %s"):format(
+        id, -- Dialog unique ID
+        tostring(value), -- Value: Clicked button or choosen item list
+        tostring(input), -- Input: Typed input by user
         GetPlayerName(source)
     ))
 end)
 ```
 
-<h2>Screenshots:</h2>
+<h3>Screenshots:</h3>
 
-<img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/9b05e8d0-c151-4778-ac25-1acfc6624075" />
-<img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/3c47c3b2-cfb3-4ba1-a246-71834da4544e" />
-<img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/9d0adcdb-5456-4271-9630-dd4cba14f409" />
-<img width="1920" height="1080" alt="4" src="https://github.com/user-attachments/assets/7fcc70e7-c475-47e9-9dd8-f0422d82ae29" />
-<img width="1920" height="1080" alt="5" src="https://github.com/user-attachments/assets/c9994fcb-bec4-4b44-a2ac-eeec419fc84f" />
-<img width="1920" height="1080" alt="6" src="https://github.com/user-attachments/assets/83d65be5-0e18-4831-8c63-03587c6d1c3e" />
-<img width="1920" height="1080" alt="7" src="https://github.com/user-attachments/assets/391cb559-f73a-42eb-a225-1003ffebb4d2" />
-<img width="1920" height="1080" alt="8" src="https://github.com/user-attachments/assets/5ab31451-4ed6-4cd9-b086-a7cc7df536ca" />
+![1](https://i.postimg.cc/6q9xRzSh/Screenshot-(1).png)
+![2](https://i.postimg.cc/x8tDPMDP/Screenshot-(2).png)
+![3](https://i.postimg.cc/NFgvTbVS/Screenshot-(3).png)
+![4](https://i.postimg.cc/nr0b1Bb2/Screenshot-(4).png)
