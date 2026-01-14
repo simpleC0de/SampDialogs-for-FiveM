@@ -1,8 +1,8 @@
--- ### EXAMPLES ###
+-- ### DIALOG STYLES ###
 
 RegisterCommand("msgbox", function(source)
     TriggerClientEvent("dialog:open", source, {
-        id = 0,
+        id = 0, -- Unique dialog ID
         type = "msgbox",
         title = "Message Box",
         text = "Example of Message Box\n123\naaa",
@@ -56,13 +56,75 @@ RegisterCommand("password", function(source)
     })
 end, false)
 
-RegisterNetEvent("dialog:response", function(id, value, input)
-    print(("Dialog ID: %d | Value: %s | Input: %s | From player: %s"):format(
-        id, -- Dialog unique ID
-        tostring(value), -- Value: Clicked button or choosen item list
-        tostring(input), -- Input: Typed input by user
-        GetPlayerName(source)
-    ))
-end)
+RegisterCommand("multiinput", function(source)
+    TriggerClientEvent("dialog:open", source, {
+        id = 4,
+        type = "multiinput",
+        title = "Give Money for player",
+        text = "Player Id:",
+        text2 = "Amount of the money:",
+        buttons = { "Give", "Cancel" }
 
--- ###
+        -- Dialog with two inputs.
+        -- Text2 is under second input.
+    })
+end, false)
+
+-- ### Example dialog response usage
+
+local DialogsHandler = {}
+
+function OnDialogMsgbox(source, value)
+    local src = source
+    local button = value
+    print("Clicked button: " .. button .. " by " .. GetPlayerName(src))
+end
+
+function OnDialogList(source, value)
+    local src = source
+    local button = value
+    print("Choosen item list: " .. button .. " by " .. GetPlayerName(src))
+end
+
+function OnDialogInput(source, value, input)
+    local src = source
+    local button = value
+
+    if button == 0 then -- First button clicked
+        local userInput = input
+        if userInput ~= "" or nil then
+            print("User input: " .. userInput .. " by " .. GetPlayerName(src))
+        end
+    end
+end
+
+function OnDialogMultiInput(source, value, input, input2)
+    local src = source
+    local button = value
+
+    if button == 0 then
+        local userInput = input
+        local userInput2 = input2
+        if userInput ~= "" or nil and userInput2 ~= "" or nil then
+            print("User input: " .. userInput .. " by " .. GetPlayerName(src))
+            print("User input 2: " .. userInput2 .. " by " .. GetPlayerName(src))
+        end
+    end
+end
+
+DialogsHandler[0] = OnDialogMsgbox
+DialogsHandler[1] = OnDialogList
+DialogsHandler[2] = OnDialogInput
+DialogsHandler[4] = OnDialogMultiInput
+
+RegisterNetEvent("dialog:response")
+AddEventHandler("dialog:response", function(id, value, input, input2)
+    local src = source
+    local dialogId = id
+
+    local func = DialogsHandler[dialogId]
+
+    if func then
+        func(src, value, input, input2)
+    end
+end)

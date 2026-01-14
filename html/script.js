@@ -92,12 +92,33 @@ window.addEventListener("message", (e) => {
             btnContainer.appendChild(b);
         });
     }
+
+    if (d.mode === "multiinput") {
+        let input = document.createElement("input");
+        input.placeholder = d.placeholder || "";
+        content.appendChild(input);
+
+        let text2 = document.createElement("p")
+        text2.innerText = d.text2;
+        content.appendChild(text2);
+
+        let input2 = document.createElement("input");
+        input2.placeholder = d.placeholder2 || "";
+        content.appendChild(input2);
+        
+        d.buttons.forEach((btn, i) => {
+            let b = document.createElement("button");
+            b.innerText = btn;
+            b.onclick = () => sendResult(i, input.value, input2.value);
+            btnContainer.appendChild(b);
+        });
+    }
 });
 
-function sendResult(value, input = null) {
+function sendResult(value, input = null, input2 = null) {
     fetch(`https://${GetParentResourceName()}/dialogResult`, {
         method: "POST",
-        body: JSON.stringify({ value, input })
+        body: JSON.stringify({ value, input, input2 })
     });
 
     document.getElementById("dialog").hidden = true;

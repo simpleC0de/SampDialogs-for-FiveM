@@ -48,6 +48,23 @@ Renderers.password = function(d)
     })
 end
 
+-- MULTI-INPUT
+Renderers.multiinput = function(d)
+    SendNUIMessage({
+        action = "open",
+        mode = "multiinput",
+        title = d.title,
+
+        text = d.text,
+        placeholder = d.placeholder or "",
+
+        text2 = d.text2,
+        placeholder2 = d.placeholder2 or "",
+
+        buttons = d.buttons or { "OK", "Cancel" }
+    })
+end
+
 RegisterNetEvent("dialog:open", function(data)
     if not Renderers[data.type] then return end
 
@@ -63,7 +80,8 @@ RegisterNUICallback("dialogResult", function(res, cb)
         "dialog:response",
         ActiveDialog,
         res.value,
-        res.input
+        res.input,
+        res.input2
     )
 
     ActiveDialog = nil

@@ -36,7 +36,7 @@ body {
     font-size: var(--title-size);
 }
 
-#dialog #text {
+#dialog p {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
