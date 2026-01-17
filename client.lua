@@ -87,3 +87,12 @@ RegisterNUICallback("dialogResult", function(res, cb)
     ActiveDialog = nil
     cb("ok")
 end)
+
+RegisterNUICallback("playSound", function(data, cb)
+    if Config.playSounds then
+        local sound = data.string;
+        PlaySoundFrontend(-1, sound, "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+    end
+    
+    cb("ok")
+end)

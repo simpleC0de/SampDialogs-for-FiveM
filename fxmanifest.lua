@@ -7,7 +7,10 @@ version "1.2"
 
 ui_page 'html/index.html'
 
-client_script 'client.lua'
+client_scripts {
+    "client.lua",
+    "config.lua"
+}
 server_script 'server.lua'
 
 files {

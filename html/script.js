@@ -14,6 +14,8 @@ window.addEventListener("message", (e) => {
     content.innerHTML = "";
     btnContainer.innerHTML = "";
 
+    playSound("CONTINUE");
+
     if (d.mode === "list") {
         let SelectedIndex = 0;
         const Canceled = -1;
@@ -115,6 +117,13 @@ window.addEventListener("message", (e) => {
     }
 });
 
+function playSound(string) {
+    fetch(`https://${GetParentResourceName()}/playSound`, {
+        method: "POST",
+        body: JSON.stringify({string})
+    });
+}
+
 function sendResult(value, input = null, input2 = null) {
     fetch(`https://${GetParentResourceName()}/dialogResult`, {
         method: "POST",
@@ -122,4 +131,6 @@ function sendResult(value, input = null, input2 = null) {
     });
 
     document.getElementById("dialog").hidden = true;
+
+    playSound("QUIT");
 }
